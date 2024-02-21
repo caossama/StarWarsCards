@@ -1,5 +1,7 @@
 :root {
   --name-color: #D2AA48;
+  --dark-gold: #9C7B3C;
+  --contrast: #7D1C1C;
 }
 
 * {
@@ -144,6 +146,7 @@ body {
   width: 100%;
   height: 100%;
 
+  z-index: -10;
 }
 
 .rain drop {
@@ -162,4 +165,77 @@ body {
   100% {
     top: 100dvh;
   }
+}
+
+
+/*
+* ------------------------------------------------------- *
+*   ---- CSS PARA LA INFORMACIÓN DE LOS PERSONAJES ----   *
+* ------------------------------------------------------- *
+*/
+
+#info {
+  width: 90%;
+  height: 95%;
+  position: fixed;
+  bottom: 20px;
+  border-radius: 10px;
+  border: solid var(--dark-gold);
+  padding: 10px;
+  color: var(--name-color);
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: translateY(300%);
+  transition: transform 2s ease;
+
+  display: grid;
+  grid-template-rows: 7% 5% 88%;
+  grid-template-columns: 11% 89%;
+}
+
+.back {
+  justify-content: right;
+  display: flex;
+
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
+
+#back:hover {
+  cursor: pointer;
+  scale: 1.3;
+}
+
+.menu {
+  grid-column: 1/3;
+  grid-row: 2/3;
+  
+  color: var(--contrast);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  background: var(--name-color);
+
+  font-family: StarWars;
+}
+
+.menu-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.menu-item:hover {
+  background-color: var(--contrast);
+  color: var(--name-color);
+}
+
+.data {
+  grid-column: 2/3;
+  grid-row: 3/4;
+
+  font-size: 1.3rem;
+
+  margin-left: 2%;
 }
