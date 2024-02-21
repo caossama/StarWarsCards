@@ -1,11 +1,15 @@
 $(document).ready(function() {
+
+  // Comienzo declarando tres variables que harán referencia a las cartas, al div que tendrá
+  // toda la información de la API y a la flecha que me servirá para volver hacia atrás y
+  // seleccionar otra carta
   const cards = $('.card');
   const info = $('#info');
   const back = $('#back');
 
-  let originalCardPositions = []; // Almacena las posiciones originales de las cartas
+  let originalCardPositions = []; // Array para almacenar las posiciones originales de las cartas
 
-  // Almacena las posiciones originales de las cartas
+  // Almaceno las posiciones originales de las cartas
   cards.each(function() {
     originalCardPositions.push({ 
       top: $(this).css('top'),
@@ -14,6 +18,8 @@ $(document).ready(function() {
     });
   });
 
+  // Función para mover las cartas hacia arriba, menos la seleccionada que se quedará a la
+  // izquierda del cuadrado que también muestro a la vez que se mueven las cartas
   cards.each(function(index) {
     $(this).on("click", function() {
       cards.each(function(idx) {
@@ -31,10 +37,10 @@ $(document).ready(function() {
       info.css('transition', 'transform 1s ease');
       info.css('transform', 'translateY(0)');
 
+      // Dependiendo de la carta seleccionada, se cargargarán unos datos u otros
       switch (index) {
         case 0:
           fetchCharacterData("https://swapi.dev/api/people/13/");
-          console.log("holi");
           break;
         case 1:
           fetchCharacterData("https://swapi.dev/api/people/4/");
@@ -53,10 +59,10 @@ $(document).ready(function() {
   });
 
   back.on("click", function() {
-    // Ocultar el div info con una animación hacia arriba
+    // Oculto el div info con una animación
     info.css('transition', 'transform 2s ease');
-    info.css('transform', 'translateY(300%)'); // Ocultarlo nuevamente
-    // Restaurar las posiciones originales de las cartas
+    info.css('transform', 'translateY(300%)');
+    // Restauro las posiciones originales de las cartas
     cards.each(function(index) {
       $(this).css('transition', 'transform 1s ease, top 1s ease, left 1s ease');
       $(this).css('transform', originalCardPositions[index].transform);
@@ -65,13 +71,13 @@ $(document).ready(function() {
     });
   });
 
-  // Agregar listeners para las opciones del menú
+  // Agrego listeners para las opciones del menú, para decidir qué datos mostrar
   $('.menu-item').on('click', function() {
     const selectedOption = $(this).text().trim();
 
     switch (selectedOption) {
       case 'Datos Personales':
-        // Cargar los datos personales nuevamente
+        // Cargar los datos personales
         loadCharacterData(lastCharacterData);
         break;
       case 'Planeta':
@@ -86,7 +92,6 @@ $(document).ready(function() {
         // Cargar otros datos
         loadOtherCharacterData(lastCharacterData);
         break;
-      // Agregar casos para otras opciones del menú si es necesario
     }
   });
 });
@@ -99,16 +104,16 @@ function fetchCharacterData(url) {
     success: function(data) {
       console.log(data);
 
-      // Guardar los últimos datos de personaje obtenidos
+      // Guardo los últimos datos de personaje obtenidos
       lastCharacterData = data;
       lastCharacterHomeworld = data.homeworld;
       lastCharacterFilms = data.films;
 
-      // Mostrar los datos del personaje
+      // Muestro los datos del personaje
       loadCharacterData(data);
     },
     error: function(error) {
-      console.error('There has been a problem with your fetch operation:', error);
+      console.error('Ha habido un problema:', error);
     }
   });
 }
@@ -116,10 +121,11 @@ function fetchCharacterData(url) {
 // Función para cargar los datos personales del personaje
 function loadCharacterData(data) {
   const characterData = $('#data');
-  characterData.empty(); // Limpiar contenido previo
+  characterData.empty(); // Limpio el contenido previo
 
   const characterInfo = $('<div class="character-info"></div>');
 
+  // Muestro los datos específicos de la API que yo quiero
   const name = $('<h2></h2>').text(data.name);
   const height = $('<p></p>').text(`Altura: ${data.height}`);
   const mass = $('<p></p>').text(`Peso: ${data.mass}`);
@@ -142,7 +148,7 @@ function fetchPlanetData(url) {
       console.log(data);
 
       const characterData = $('#data');
-      characterData.empty(); // Limpiar contenido previo
+      characterData.empty();
 
       const planetInfo = $('<div class="planet-info"></div>');
 
@@ -160,7 +166,7 @@ function fetchPlanetData(url) {
       characterData.append(planetInfo);
     },
     error: function(error) {
-      console.error('There has been a problem with your fetch operation:', error);
+      console.error('Ha habido un problema:', error);
     }
   });
 }
@@ -175,7 +181,7 @@ function fetchFilmData(filmUrls) {
       console.log(films);
 
       const characterData = $('#data');
-      characterData.empty(); // Limpiar contenido previo
+      characterData.empty();
 
       const filmsInfo = $('<div class="films-info"></div>');
       const titleHeader = $('<h2>Aparición en Películas</h2>');
@@ -197,7 +203,7 @@ function fetchFilmData(filmUrls) {
       characterData.append(filmsInfo);
     })
     .fail(function(error) {
-      console.error('There has been a problem with your fetch operation:', error);
+      console.error('Ha habido un problema:', error);
     });
 }
 
@@ -208,12 +214,12 @@ function loadOtherCharacterData(data) {
   }
 
   const characterData = $('#data');
-  characterData.empty(); // Limpiar contenido previo
+  characterData.empty();
 
   const otherData = $('<div class="other-data"></div>');
   let hasContent = false; // Variable para rastrear si hay contenido para mostrar
 
-  // Agregar datos de vehículos si existen
+  // Agrego los datos de los vehículos si existen
   if (data.vehicles.length > 0) {
     hasContent = true; // Hay contenido para mostrar
     const vehiclesInfo = $('<div class="vehicles-info"></div>');
@@ -232,7 +238,7 @@ function loadOtherCharacterData(data) {
           vehiclesInfo.append(vehicleItem);
         },
         error: function(error) {
-          console.error('There has been a problem with your fetch operation:', error);
+          console.error('Ha habido un problema:', error);
         }
       });
     });
@@ -240,7 +246,7 @@ function loadOtherCharacterData(data) {
     otherData.append(vehiclesTitle, vehiclesInfo);
   }
 
-  // Agregar datos de starships si existen
+  // Agrego los datos de los starships si existen
   if (data.starships.length > 0) {
     hasContent = true; // Hay contenido para mostrar
     const starshipsInfo = $('<div class="starships-info"></div>');
@@ -259,7 +265,7 @@ function loadOtherCharacterData(data) {
           starshipsInfo.append(starshipItem);
         },
         error: function(error) {
-          console.error('There has been a problem with your fetch operation:', error);
+          console.error('Ha habido un problema:', error);
         }
       });
     });
@@ -295,15 +301,13 @@ function loadOtherCharacterData(data) {
         otherData.append(speciesTitle, speciesInfo);
       },
       error: function(error) {
-        console.error('There has been a problem with your fetch operation:', error);
+        console.error('Ha habido un problema:', error);
       }
     });
   });
 
   characterData.append(otherData);
 }
-
-
 
 const divRain = document.querySelector('.rain');
 
@@ -329,4 +333,4 @@ function rain(numDrops) {
   }
 }
 
-rain(80); // Genera 80 gotas de lluvia
+rain(80); // Genera x gotas de lluvia, solo hay que cambiar el parámetro de dentro
