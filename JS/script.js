@@ -69,6 +69,9 @@ $(document).ready(function() {
       $(this).css('top', originalCardPositions[index].top);
       $(this).css('left', originalCardPositions[index].left);
     });
+    setTimeout(function() {
+      cards.removeAttr('style');
+    }, 1000);
   });
 
   // Agrego listeners para las opciones del menú, para decidir qué datos mostrar
